@@ -36,12 +36,26 @@ const handler = NextAuth({
             image: profile.picture,
           });
         }
+        console.log("User signed in successfully!");
+        console.log("User: ", profile.email);
         return true;
       } catch (error) {
         console.log("Error checking if user exists: ", error.message);
         return false;
       }
     },
+    async redirect({ url, baseUrl }) {
+      // If the URL starts with "/", concatenate the base URL and the URL
+      if (url.startsWith("/")) {
+      return `${baseUrl}${url}`;
+      }
+      // If the URL's origin matches the base URL, return the URL as is
+      else if (new URL(url).origin === baseUrl) {
+      return url;
+      }
+      // Otherwise, return the base URL
+      return baseUrl;
+    }
   },
 });
 

@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
-  const {data:session} = useSession();
-
+  const { data: session } = useSession();
   const [providers, setProviders] = useState(null);
   const [toggleDropDown, setToggleDropDown] = useState(false);
 
@@ -23,6 +22,7 @@ const Nav = () => {
       <Link href={"/"} className="flex gap-2 flex-center">
         <Image
           src="/assets/images/logo.svg"
+          alt="logo"
           width={30}
           height={30}
           className="object-content"
@@ -38,7 +38,11 @@ const Nav = () => {
               Create Post
             </Link>
 
-            <button type="button" onClick={signOut} className="outline_btn">
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: "/", redirect: true })}
+              className="outline_btn"
+            >
               Sign Out
             </button>
             <Link href="/profile">
@@ -58,7 +62,9 @@ const Nav = () => {
                 <button
                   type="button"
                   key={provider.name}
-                  onClick={() => signIn(provider.id)}
+                  onClick={() => {
+                    signIn(provider.id);
+                  }}
                   className="black_btn"
                 >
                   Sign In
@@ -103,10 +109,12 @@ const Nav = () => {
                   type="button"
                   onClick={() => {
                     setToggleDropDown(false);
-                    signOut();
+                    signOut({ callbackUrl: "/", redirect: true });
                   }}
                   className="mt-5 w-full black_btn"
-                >Sign Out</button>
+                >
+                  Sign Out
+                </button>
               </div>
             )}
           </div>
